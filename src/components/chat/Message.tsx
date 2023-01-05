@@ -1,7 +1,7 @@
 import * as React from "react";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-import { Avatar, Typography, useTheme } from "@mui/material";
+import { Avatar, CircularProgress, Typography, useTheme } from "@mui/material";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import PersonIcon from "@mui/icons-material/Person";
 
@@ -15,14 +15,20 @@ const TextBox = styled(Paper)(({ theme }) => ({
 	color: theme.palette.text.secondary,
 	padding: "1em 2em",
 	marginTop: "1em",
+	wordBreak: "break-word",
 }));
 
 type MessageProps = {
 	type?: "user" | "ai";
 	text: string;
+	isLoading: boolean;
 };
 
-export default function Message({ type = "user", text }: MessageProps) {
+export default function Message({
+	type = "user",
+	text,
+	isLoading = false,
+}: MessageProps) {
 	const theme = useTheme();
 	return (
 		<MessageLayout>
@@ -39,7 +45,11 @@ export default function Message({ type = "user", text }: MessageProps) {
 				{type === "ai" && <SmartToyIcon />}
 			</Avatar>
 			<TextBox elevation={type === "user" ? 2 : 12}>
-				<Typography variant="body1">{text}</Typography>
+				{isLoading ? (
+					<CircularProgress size={15} />
+				) : (
+					<Typography variant="body1">{text}</Typography>
+				)}
 			</TextBox>
 		</MessageLayout>
 	);

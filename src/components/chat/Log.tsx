@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Message from "./Message";
 import { styled } from "@mui/material/styles";
 import { Message as MessageType } from "../../types";
@@ -29,6 +29,14 @@ const Layout = styled("div")(({ theme }) => ({
 }));
 
 export default function Log({ messages }: { messages: MessageType[] }) {
+	const messagesEndRef = useRef<HTMLHeadingElement>(null);
+
+	const scrollToBottom = () => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); // @ts-nocheck
+	};
+	useEffect(() => {
+		scrollToBottom();
+	}, [messages]);
 	return (
 		<Layout>
 			{messages.map((message) => (
@@ -36,8 +44,10 @@ export default function Log({ messages }: { messages: MessageType[] }) {
 					key={message.id}
 					text={message.text}
 					type={message.from}
+					isLoading={message.isLoading}
 				/>
 			))}
+			<div ref={messagesEndRef} />
 		</Layout>
 	);
 }

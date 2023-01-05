@@ -4,7 +4,12 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 
-export default function Input({ onSubmit }: { onSubmit: any }) {
+type InputProps = {
+	onSubmit: any;
+	isLoading: boolean;
+};
+
+export default function Input({ onSubmit, isLoading = false }: InputProps) {
 	return (
 		<Paper
 			component="form"
@@ -14,17 +19,19 @@ export default function Input({ onSubmit }: { onSubmit: any }) {
 				display: "flex",
 				alignItems: "center",
 				height: "fit-content",
+				opacity: isLoading ? 0.3 : 1,
 			}}
 			onSubmit={onSubmit}
 		>
 			<InputBase
 				sx={{ ml: 1, flex: 1 }}
-				autoFocus
-				maxRows={5}
+				autoFocus={isLoading}
 				name="prompt"
+				disabled={isLoading}
+				autoComplete="off"
 			/>
-			<IconButton type="submit" sx={{ p: "10px" }}>
-				<SendIcon />
+			<IconButton disabled={isLoading} type="submit" sx={{ p: "10px" }}>
+				<SendIcon color="primary" />
 			</IconButton>
 		</Paper>
 	);
